@@ -19,4 +19,8 @@ def bar(ax, x, y, title, xlabel, ylabel, edgecolor="black", width=0.6):
     return ax
 
 
-    
+def boxplot(ax, data, title, ylabel, labels=None, patch_artist=True):
+    boxplot = ax.boxplot(data, labels=labels, patch_artist=patch_artist)
+    ax.set_title(title)
+    ax.set_ylabel(ylabel)
+    return ax
