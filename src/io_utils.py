@@ -23,4 +23,4 @@ def coerce_numeric(df: pd.DataFrame) -> pd.DataFrame:
     out = df.copy()
     for c in ["age", "height", "weight", "systolic_bp", "cholesterol", "disease"]:
         out[c] = pd.to_numeric(out[c], errors="coerce")
-        return out
+    return out
