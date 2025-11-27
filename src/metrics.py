@@ -27,3 +27,8 @@ def simulated_disease_proportion(df: pd.DataFrame) -> pd.DataFrame:
          "difference": diff }
 
 
+def sbp_mean(df: pd.DataFrame) -> float:
+    """
+    Returns the mean of systolic blood pressure
+    """
+    return float(np.mean(df["systolic_bp"]))
