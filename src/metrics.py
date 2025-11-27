@@ -9,3 +9,21 @@ def summary_stats(df: pd.DataFrame) -> pd.DataFrame:
 
     stats_df = df[cols].agg(["mean", "median", "min", "max"])
     return stats_df
+
+
+def simulated_disease_proportion(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Returns a DataFrame with the proportion of simulated disease cases
+    """
+
+    disease_count = df["disease"].mean()
+
+    simulated_count = (np.random.random(1000) < disease_count).mean()
+
+    diff = disease_count - simulated_count
+
+    return { "disease_count": disease_count,
+         "simulated_count": simulated_count,
+         "difference": diff }
+
+
