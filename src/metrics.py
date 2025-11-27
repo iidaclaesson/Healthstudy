@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from math import sqrt
 
 def summary_stats(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -28,7 +29,39 @@ def simulated_disease_proportion(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def sbp_mean(df: pd.DataFrame) -> float:
+     """ 
+     Returns the mean of systolic blood pressure 
+     """ 
+     return float(np.mean(df["systolic_bp"]))
+
+
+def ci_mean_normal(x: np.ndarray, confidence=0.95):
     """
-    Returns the mean of systolic blood pressure
+    Returns the confidence interval for systolic blood pressure
     """
-    return float(np.mean(df["systolic_bp"]))
+    x = np.asarray(x, dtype=float)
+    mean_x = float(np.mean(x))
+    std = float(np.std(x, ddof=1))
+    n = len(x)
+    z_critical = 1.96
+    half_width = z_critical * std / sqrt(n)
+    lo, hi = mean_x - half_width, mean_x + half_width
+    return lo, hi, mean_x, std, n
+
+
+def bootstrap_mean(smokers, nonsmokers, n_boot=10_000):
+    """
+    Returns the bootstrap results for the difference in mean systolic blood pressure
+    between smokers and non-smokers.
+    """
+    obs_diff = smokers.mean() - nonsmokers.mean()
+    
+    boot_diffs = np.empty(n_boot)
+    for i in range(n_boot):
+        smokers_star = np.random.choice(smokers, size=len(smokers), replace=True)
+        nonsmokers_star = np.random.choice(nonsmokers, size=len(nonsmokers), replace=True)
+        boot_diffs[i] = smokers_star.mean() - nonsmokers_star.mean()
+    p_boot = np.mean(boot_diffs >= obs_diff)
+    ci_low, ci_high = np.percentile(boot_diffs, [2.5, 97.5])
+
+    return obs_diff, p_boot, (ci_low, ci_high)
