@@ -31,4 +31,5 @@ def scatter(ax, x, y, title, xlabel, ylabel, marker="o"):
     ax.set_title(title)
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
+    ax.grid(True)
     return ax
