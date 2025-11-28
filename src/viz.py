@@ -24,3 +24,11 @@ def boxplot(ax, data, title, ylabel, labels=None, patch_artist=True):
     ax.set_title(title)
     ax.set_ylabel(ylabel)
     return ax
+
+
+def scatter(ax, x, y, title, xlabel, ylabel, marker="o"):
+    ax.scatter(x, y, marker=marker)
+    ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    return ax
