@@ -28,13 +28,6 @@ def simulated_disease_proportion(df: pd.DataFrame) -> pd.DataFrame:
          "difference": diff }
 
 
-def sbp_mean(df: pd.DataFrame) -> float:
-     """ 
-     Returns the mean of systolic blood pressure 
-     """ 
-     return float(np.mean(df["systolic_bp"]))
-
-
 def ci_mean_normal(x, confidence: float = 0.95):
     """
     Returns the confidence interval for systolic blood pressure
@@ -66,3 +59,18 @@ def bootstrap_mean(smokers, nonsmokers, n_boot=10_000):
 
     return float(obs_diff), float(p_boot), (float(ci_low), float(ci_high))
 
+class HealthAnalyzer:
+    """
+    A class which analyzes health data
+    """
+
+    def __init__(self, df: pd.DataFrame):
+        self.df = df
+    
+    def sbp_mean(self) -> float:
+        return float(self.df["systolic_bp"].mean())
+    
+    def smoker_diff(self) -> float:
+        smokers = self.df[self.df["smoker"] == "Yes"]["systolic_bp"]
+        nonsmokers = self.df[self.df["smoker"] == "No"]["systolic_bp"]
+        return float(smokers.mean() - nonsmokers.mean())
