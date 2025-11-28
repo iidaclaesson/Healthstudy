@@ -35,7 +35,7 @@ def sbp_mean(df: pd.DataFrame) -> float:
      return float(np.mean(df["systolic_bp"]))
 
 
-def ci_mean_normal(x: np.ndarray, confidence=0.95):
+def ci_mean_normal(x, confidence: float = 0.95):
     """
     Returns the confidence interval for systolic blood pressure
     """
@@ -49,7 +49,7 @@ def ci_mean_normal(x: np.ndarray, confidence=0.95):
     return lo, hi, mean_x, std, n
 
 
-def bootstrap_mean(smokers, nonsmokers, n_boot=10_000):
+def bootstrap_mean(smokers, nonsmokers, n_boot=10_000): 
     """
     Returns the bootstrap results for the difference in mean systolic blood pressure
     between smokers and non-smokers.
@@ -64,4 +64,5 @@ def bootstrap_mean(smokers, nonsmokers, n_boot=10_000):
     p_boot = np.mean(boot_diffs >= obs_diff)
     ci_low, ci_high = np.percentile(boot_diffs, [2.5, 97.5])
 
-    return obs_diff, p_boot, (ci_low, ci_high)
+    return float(obs_diff), float(p_boot), (float(ci_low), float(ci_high))
+
