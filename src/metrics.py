@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 from math import sqrt
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
 
 def summary_stats(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -81,10 +83,6 @@ def linear_regression(df):
     r_squared = 1 - (ss_res / ss_tot)
 
     return beta_hat.flatten(), float(r_squared)
-
-
-
-
 
 
 class HealthAnalyzer:
