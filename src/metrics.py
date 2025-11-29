@@ -59,6 +59,34 @@ def bootstrap_mean(smokers, nonsmokers, n_boot=10_000):
 
     return float(obs_diff), float(p_boot), (float(ci_low), float(ci_high))
 
+
+def linear_regression(df):
+    """
+    Returns the coefficients of a linear 
+    regression predicting systolic blood pressure
+    from age and weight
+    """
+
+    y = df["systolic_bp"].values.reshape(-1, 1)
+    X = df[["age", "weight"]].values
+
+    X = np.column_stack((np.ones(len(X)), X))
+
+    beta_hat = np.linalg.inv(X.T @ X) @ (X.T @ y)
+
+    y_pred = X @ beta_hat   
+
+    ss_res = np.sum((y - y_pred) ** 2)
+    ss_tot = np.sum((y - y.mean()) ** 2)
+    r_squared = 1 - (ss_res / ss_tot)
+
+    return beta_hat.flatten(), float(r_squared)
+
+
+
+
+
+
 class HealthAnalyzer:
     """
     A class which analyzes health data
