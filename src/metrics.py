@@ -64,6 +64,10 @@ def bootstrap_mean(smokers, nonsmokers, n_boot=10_000):
 
 def linear_regression(df: pd.DataFrame):
     
+    """
+    Returns the coefficients of a linear regression
+    predicting systolic blood pressure from age and weight
+    """
     y_values = df["systolic_bp"].values
     x_values = df[["age", "weight"]].values
 
@@ -89,6 +93,7 @@ def linear_regression(df: pd.DataFrame):
     r_squared = 1 - (ss_res / ss_tot)
 
     return intercept_hat, slope_hat_age, slope_hat_weight, float(r_squared)
+
 
 class HealthAnalyzer:
     """
