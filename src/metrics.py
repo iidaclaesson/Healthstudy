@@ -62,28 +62,33 @@ def bootstrap_mean(smokers, nonsmokers, n_boot=10_000):
     return float(obs_diff), float(p_boot), (float(ci_low), float(ci_high))
 
 
-def linear_regression(df):
-    """
-    Returns the coefficients of a linear 
-    regression predicting systolic blood pressure
-    from age and weight
-    """
+def linear_regression(df: pd.DataFrame):
+    
+    y_values = df["systolic_bp"].values
+    x_values = df[["age", "weight"]].values
 
-    y = df["systolic_bp"].values.reshape(-1, 1)
-    X = df[["age", "weight"]].values
+    ones_column = np.ones((len(x_values), 1))
+    design_matrix = np.column_stack((ones_column, x_values))
 
-    X = np.column_stack((np.ones(len(X)), X))
+    transposed_design = design_matrix.T
+    gram_matrix = transposed_design @ design_matrix
+    design_response = transposed_design @ y_values
 
-    beta_hat = np.linalg.inv(X.T @ X) @ (X.T @ y)
+    beta_hat_vector = np.linalg.inv(gram_matrix) @ design_response
 
-    y_pred = X @ beta_hat   
+    intercept_hat = float(beta_hat_vector[0])
+    slope_hat_age = float(beta_hat_vector[1])
+    slope_hat_weight = float(beta_hat_vector[2])
 
-    ss_res = np.sum((y - y_pred) ** 2)
-    ss_tot = np.sum((y - y.mean()) ** 2)
+    y_hat_values = intercept_hat + slope_hat_age * df["age"] + slope_hat_weight * df["weight"]
+    residuals = df["systolic_bp"] - y_hat_values
+
+    ss_res = np.sum(residuals ** 2)
+    ss_tot = np.sum((df["systolic_bp"] - df["systolic_bp"].mean()) ** 2)
+
     r_squared = 1 - (ss_res / ss_tot)
 
-    return beta_hat.flatten(), float(r_squared)
-
+    return intercept_hat, slope_hat_age, slope_hat_weight, float(r_squared)
 
 class HealthAnalyzer:
     """
