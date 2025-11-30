@@ -100,3 +100,19 @@ class HealthAnalyzer:
         smokers = self.df[self.df["smoker"] == "Yes"]["systolic_bp"]
         nonsmokers = self.df[self.df["smoker"] == "No"]["systolic_bp"]
         return float(smokers.mean() - nonsmokers.mean())
+    
+
+def pca_analysis(df: pd.DataFrame, cols: list, n_components: int = 2) -> pd.DataFrame:
+    """
+    Performs PCA
+    """
+
+    x = df[cols].dropna().values
+
+    scaler = StandardScaler()
+    x_scaled = scaler.fit_transform(x)
+
+    pca = PCA(n_components=n_components)
+    components = pca.fit_transform(x_scaled)
+
+    return components, pca.explained_variance_ratio_, pca
